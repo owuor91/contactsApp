@@ -23,4 +23,10 @@ class ContactsRepository {
   fun getContactById(contactId: Int): LiveData<Contact>{
     return database.getContactDao().getContactById(contactId)
   }
+  
+  suspend fun deleteContact(contact: Contact){
+    withContext(Dispatchers.IO){
+      database.getContactDao().deleteContact(contact)
+    }
+  }
 }

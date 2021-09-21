@@ -25,4 +25,10 @@ class ContactsViewModel: ViewModel() {
   fun getContactById(contactId: Int){
     contactLiveData = contactsRepository.getContactById(contactId)
   }
+  
+  fun deleteContact(contact: Contact){
+    viewModelScope.launch {
+      contactsRepository.deleteContact(contact)
+    }
+  }
 }
