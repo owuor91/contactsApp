@@ -12,10 +12,14 @@ import com.example.contactsapp.R.id
 import com.example.contactsapp.R.layout
 import com.example.contactsapp.databinding.ActivityMainBinding
 import com.example.contactsapp.viewmodel.ContactsViewModel
+import com.google.gson.Gson
+import org.json.JSONArray
 
 class MainActivity : AppCompatActivity() {
   val contactsViewModel: ContactsViewModel by viewModels()
   lateinit var binding: ActivityMainBinding
+  
+  var selectedContacts = mutableListOf<Contact>()
   
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
@@ -33,6 +37,13 @@ class MainActivity : AppCompatActivity() {
     binding.fabAddCoontact.setOnClickListener {
       startActivity(Intent(this, AddContactActivity::class.java))
     }
+    
+    binding.btnCheckout.setOnClickListener {
+      var intent = Intent(this, CheckoutActivity::class.java)
+      var gson = Gson()
+      intent.putExtra("SELECTED_CONTACTS", gson.toJson(selectedContacts))
+      startActivity(intent)
+    }
   }
   
   fun displayContacts(contactList: List<Contact>){
@@ -41,11 +52,17 @@ class MainActivity : AppCompatActivity() {
       override fun onClickDeleteContact(contact: Contact) {
         contactsViewModel.deleteContact(contact)
       }
+  
+      override fun onSelectContact(contact: Contact) {
+        selectedContacts.add(contact)
+      }
     })
     binding.rvContacts.adapter = contactsAdapter
   }
   
   interface ContactClickListener{
     fun onClickDeleteContact(contact: Contact)
+    
+    fun onSelectContact(contact: Contact)
   }
 }

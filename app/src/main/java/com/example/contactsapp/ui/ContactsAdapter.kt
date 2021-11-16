@@ -37,9 +37,7 @@ class ContactsAdapter(var contactsList: List<Contact>, var context: Context, var
     }
     
     holder.cvContact.setOnClickListener {
-      var intent = Intent(context, ContactDetailsActivity::class.java)
-      intent.putExtra("NAME", currentContact.name)
-      context.startActivity(intent)
+      contactClickListener.onSelectContact(currentContact)
     }
     
     holder.ivContact.setOnClickListener {
